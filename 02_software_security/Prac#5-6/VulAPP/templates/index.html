@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Добро пожаловать в уязвимое приложение</h1>
+<p>Выберите лог-файл для просмотра:</p>
+<ul class="log-list">
+  {% for log in logs %}
+    <li><a href="{{ url_for('view_log') }}?filename={{ log }}">{{ log }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

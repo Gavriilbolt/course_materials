@@ -1,0 +1,12 @@
+FROM debian:bookworm-slim
+
+# Установка необходимых пакетов
+RUN apt-get update && \
+    apt-get install -y knockd iptables && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Копируем конфиг knockd
+COPY knockd.conf /etc/knockd.conf
+
+# Запуск knockd в foreground (Docker требует foreground процесса)
+CMD ["knockd", "-D", "-c", "/etc/knockd.conf"]

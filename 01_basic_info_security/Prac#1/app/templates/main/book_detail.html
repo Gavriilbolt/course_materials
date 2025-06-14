@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }} — BookVault{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Обложка -->
+        <div class="col-md-4 text-center mb-4">
+            {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Обложка книги" class="img-fluid rounded shadow-sm">
+            {% else %}
+                <div class="text-muted">Нет обложки</div>
+            {% endif %}
+        </div>
+
+        <!-- Информация -->
+        <div class="col-md-8">
+            <h2>{{ book.title }}</h2>
+            <p><strong>Автор:</strong> {{ book.author }}</p>
+
+            <hr>
+
+            <h4 class="mt-4">Комментарии</h4>
+            {% if book.comments %}
+                <ul class="list-group mb-4">
+                    {% for comment in book.comments %}
+                        <li class="list-group-item">
+                            {{ comment.content }}
+                            <small class="text-muted d-block">
+                                {% if comment.user %}
+                                    от {{ comment.user.username }}
+                                {% else %}
+                                    аноним
+                                {% endif %}
+                            </small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info">Пока нет комментариев.</div>
+            {% endif %}
+
+            <h5 class="mt-4">Оставить комментарий</h5>
+            <form method="POST" action="{{ url_for('comments.add_comment') }}">
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <div class="mb-3">
+                    <textarea class="form-control" name="content" rows="4" placeholder="Ваш комментарий" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-1"></i> Отправить
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

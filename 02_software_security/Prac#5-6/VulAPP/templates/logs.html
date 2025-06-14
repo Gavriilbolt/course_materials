@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Просмотр: {{ filename }}</h1>
+<pre class="log-content">{{ content }}</pre>
+<a class="button" href="{{ url_for('index') }}">Назад к логам</a>
+{% endblock %}
