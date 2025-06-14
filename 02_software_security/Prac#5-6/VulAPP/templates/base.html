@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Уязвимое Flask‑приложение</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('index') }}">Главная</a> |
+    <a href="{{ url_for('calculate') }}">Калькулятор</a> |
+    <a href="{{ url_for('assignment') }}">Описание задания</a>
+  </nav>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+  <footer>
+    <div class="container">
+      <p class="footer-text">Практическое задание №5 и Практическое задание №6</p>
+    </div>
+  </footer>
+</body>
+</html>
