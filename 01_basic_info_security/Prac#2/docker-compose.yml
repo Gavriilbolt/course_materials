@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  insecure_container:
+    build: ./insecure    # путь к Dockerfile с небезопасной конфигурацией
+    image: insecure_image:latest
+    container_name: insecure_container
+    privileged: true     # запускаем контейнер в привилегированном режиме (плохо!)
+    ports:
+      - "2222:22"        # пробрасываем порт 22 контейнера на порт 2222 хоста
+    volumes:
+      - ./data:/data     # монтируем локальную папку ./data внутрь контейнера (RW)
