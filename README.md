@@ -6,6 +6,8 @@
 
 - **Основной курс**: [Информационная безопасность на Stepik](https://stepik.org/course/236499/promo)  
 - **Дополнительно по Docker**: [Супер крутой курс по Docker](https://stepik.org/course/123300/promo)
+- **Pygoat**: [Официальный репозиторий проекта](https://github.com/adeyosemanputra/pygoat)
+- **OWASP Juice Shop**: [Вероятно, самое современное и сложное небезопасное веб-приложение](https://github.com/juice-shop/juice-shop)
 
 ## Структура репозитория
 
