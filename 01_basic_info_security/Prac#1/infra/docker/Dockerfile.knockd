@@ -1,0 +1,39 @@
+FROM debian:bookworm-slim
+
+# Установка необходимых пакетов
+RUN apt-get update && \
+    apt-get install -y openssh-server knockd iptables && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Создание необходимых директорий
+RUN mkdir -p /var/run/sshd /var/secret
+
+# Установка root-пароля
+RUN echo 'root:password' | chpasswd
+
+# Разрешение входа по SSH для root
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Копируем конфигурацию knockd
+COPY knockd.conf /etc/knockd.conf
+
+# Копируем флаг
+COPY flag.txt /var/secret/flag.txt
+
+# Установка прав доступа к флагу
+RUN chmod 600 /var/secret/flag.txt && chown root:root /var/secret/flag.txt
+
+# Создаём start.sh: сбрасываем iptables, задаём DROP и запускаем sshd + knockd
+RUN echo '#!/bin/bash\n\
+iptables -F\n\
+iptables -P INPUT DROP\n\
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n\
+iptables -A INPUT -p tcp --dport 22 -j DROP\n\
+/usr/sbin/sshd &\n\
+exec knockd -i eth0 -D -v -c /etc/knockd.conf' > /start.sh && chmod +x /start.sh
+
+# Открываем порты наружу
+EXPOSE 22 7000 8000 9000
+
+# Стартуем через скрипт
+CMD ["/start.sh"]

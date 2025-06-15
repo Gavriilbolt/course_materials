@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Калькулятор</h1>
+<form method="post">
+  <input type="text" name="expr" placeholder="Введите выражение" value="{{ expr }}" required>
+  <button type="submit">Вычислить</button>
+</form>
+{% if result is not none %}
+  <div class="result">Результат: {{ result }}</div>
+{% endif %}
+<a class="button" href="{{ url_for('index') }}">Назад на главную</a>
+{% endblock %}

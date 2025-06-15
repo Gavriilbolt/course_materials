@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: bookvault
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: bookvault_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bookvault-net
+
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    networks:
+      - bookvault-net
+    # ENV удаляем полностью
+    # FLASK_ENV и SECRET_KEY уже не нужны
+    # DATABASE_URL тоже
+    command: >
+      sh -c "sleep 5 &&
+             python app/seed.py &&
+             python app/run.py"
+  knockd:
+    build:
+      context: ./infra/docker
+      dockerfile: Dockerfile.knockd
+    container_name: knockd
+    ports:
+      - "2222:22"      # SSH
+      - "7000:7000"    # knock
+      - "8000:8000"
+      - "9000:9000"
+    cap_add:
+      - NET_ADMIN      # разрешение на iptables
+    restart: always
+
+volumes:
+  db_data:
+
+networks:
+  bookvault-net:
+    driver: bridge

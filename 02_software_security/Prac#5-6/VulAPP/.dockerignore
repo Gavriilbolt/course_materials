@@ -1,0 +1,21 @@
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+.venv/
+
+
+.idea/
+.vscode/
+
+
+logs/
+
+
+build/
+dist/
+*.egg-info
+
+# OS files
+.DS_Store
